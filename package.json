@@ -6,12 +6,22 @@
   "scripts": {
     "electron": "electron .",
     "dev": "nf start -p 3000",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "format": "npx prettier --write \"**/*.{js,jsx,json,md}\""
   },
   "dependencies": {
+    "classnames": "^2.2.6",
+    "electron": "^7.0.0",
+    "foreman": "^3.0.1",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "xlsx": "^0.15.1"
   },
   "prettier": {
     "endOfLine": "lf",

@@ -1,25 +1,67 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+require('./App.css');
+
+const React = require('react');
+
+const electron = window.require('electron');
+const dialog = electron.remote.dialog;
+
+const XLXS = window.require('xlsx');
+
+const XyCenterTranslate = require('./components/XyCenterTranslate');
+const Gutter = require('./components/Gutter');
+const View = require('./components/View');
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <View className="view-import-xlsx">
+      <WelcomeImage />
+      <ImportTrigger onClick={() => {
+        readXlsxFile(getXlsxFile());
+      }}/>
+    </View>
+  );
+}
+
+function WelcomeImage() {
+  return (
+    <div className="welcome-image">
+      <img src="https://picsum.photos/id/237/368" alt="欢迎" />
     </div>
+  );
+}
+
+function ImportTrigger({ onClick }) {
+  return (
+    <div
+      className="import-trigger"
+      onClick={onClick}
+    >
+      <XyCenterTranslate className="skin">
+        <div>
+          <i className="icon-import" />
+        </div>
+
+        <Gutter h="10px" />
+
+        <div className="name">导入文件</div>
+      </XyCenterTranslate>
+    </div>
+  );
+}
+
+function getXlsxFile() {
+  const rslt = dialog.showOpenDialogSync({ properties: ['openFile'] });
+  return rslt ? rslt[0] : null;
+}
+
+function readXlsxFile(xlsxFile) {
+  if (!xlsxFile) {
+    return;
+  }
+
+  const workbook = XLXS.readFile(xlsxFile);
+  console.log(
+    XLXS.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]),
   );
 }
 
