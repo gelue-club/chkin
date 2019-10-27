@@ -68,6 +68,17 @@ function App() {
             onSubmit={({ guest }, actions) => {
               const foundGuest = findOneGuestByPhone({ phone: guest });
 
+              if (isEmpty(foundGuest)) {
+                actions.resetForm();
+
+                updateGuestInfo({
+                  userName: null,
+                  userPhone: null,
+                });
+
+                return;
+              }
+
               store.update('db', targetDB => {
                 remove(targetDB, val =>
                   isEqual(val.userPhone, findOneGuestByPhone({ phone: guest })),
