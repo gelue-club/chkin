@@ -18,8 +18,10 @@ let mainWindow;
 function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    frame: true,
     width: 368,
     height: 600,
+    resizable: false,
     webPreferences: { nodeIntegration: true, webSecurity: false },
   });
 
