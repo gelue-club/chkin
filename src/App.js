@@ -198,6 +198,10 @@ function App() {
           <ImportTrigger
             onClick={() => {
               const xlsx = readXlsxFile(getXlsxFile());
+              if (isEmpty(xlsx)) {
+                return;
+              }
+
               const db = times(size(xlsx), idx => ({
                 userName: xlsx[idx]['姓名'],
                 userPhone: formatPhoneNumber({ phone: xlsx[idx]['手机号'] }),
@@ -249,7 +253,11 @@ function findOneGuestByPhone({ phone }) {
 }
 
 function getXlsxFile() {
-  const rslt = dialog.showOpenDialogSync({ properties: ['openFile'] });
+  const rslt = dialog.showOpenDialogSync({
+    properties: ['openFile'],
+    filters: [{ name: 'Excel', extensions: ['xlsx', 'xls'] }],
+  });
+
   return rslt ? rslt[0] : null;
 }
 
