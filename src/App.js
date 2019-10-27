@@ -18,6 +18,7 @@ const trim = require('lodash/trim');
 const toString = require('lodash/toString');
 const size = require('lodash/size');
 const times = require('lodash/times');
+const remove = require('lodash/remove');
 
 const XyCenterTranslate = require('./components/XyCenterTranslate');
 const Gutter = require('./components/Gutter');
@@ -63,28 +64,25 @@ function App() {
           <Formik
             initialValues={{ guest: '' }}
             onSubmit={({ guest }, actions) => {
-              const db = store.get('db');
+              const foundGuest = findOneGuestByPhone({ phone: guest });
 
-              const rslt = filter(db, [
-                'userPhone',
-                +trim(toString(guest).replace(/\s/g, '')),
-              ]);
+              store.update('db', targetDB => {
+                remove(targetDB, val =>
+                  isEqual(val.userPhone, findOneGuestByPhone({ phone: guest })),
+                );
 
-              console.log(rslt[0].checked);
+                targetDB.unshift(
+                  merge(foundGuest[0], {
+                    checked: foundGuest[0].checked + 1,
+                  }),
+                );
 
-              store.update('db', currentDB => {
-                merge(db, [merge(rslt[0], {
-                  checked: +rslt[0].checked + 1,
-                })]);
-
-                console.log(db);
-
-                return db;
+                return targetDB;
               });
 
               updateGuestInfo({
-                userName: rslt[0].userName,
-                userPhone: rslt[0].userPhone,
+                userName: foundGuest[0].userName,
+                userPhone: foundGuest[0].userPhone,
               });
 
               actions.resetForm();
@@ -202,9 +200,7 @@ function App() {
               const xlsx = readXlsxFile(getXlsxFile());
               const db = times(size(xlsx), idx => ({
                 userName: xlsx[idx]['姓名'],
-                userPhone: +trim(
-                  toString(xlsx[idx]['手机号']).replace(/\s/g, ''),
-                ),
+                userPhone: formatPhoneNumber({ phone: xlsx[idx]['手机号'] }),
                 checked: 0,
               }));
 
@@ -241,6 +237,15 @@ function ImportTrigger({ onClick }) {
       </XyCenterTranslate>
     </div>
   );
+}
+
+function formatPhoneNumber({ phone }) {
+  return +trim(toString(phone).replace(/\s/g, ''));
+}
+
+function findOneGuestByPhone({ phone }) {
+  const db = store.get('db');
+  return filter(db, ['userPhone', formatPhoneNumber({ phone })]);
 }
 
 function getXlsxFile() {
