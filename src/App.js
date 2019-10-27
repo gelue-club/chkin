@@ -30,6 +30,8 @@ const LeftFloatDiv = require('./components/LeftFloatDiv');
 const RightFloatDiv = require('./components/RightFloatDiv');
 const LineSplitedGutter = require('./components/LineSplitedGutter');
 
+const imgWelcome = require('./welcome.jpg');
+
 const ipt = React.createRef();
 
 store.addPlugin(storeUpdate);
@@ -222,7 +224,7 @@ function App() {
 function WelcomeImage() {
   return (
     <div className="welcome-image">
-      <img src="https://picsum.photos/id/237/368" alt="欢迎" />
+      <img src={imgWelcome} alt="欢迎" />
     </div>
   );
 }
