@@ -4,17 +4,19 @@
   "homepage": "./",
   "main": "./electron-starter.js",
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "electron": "electron .",
     "dev": "nf start -p 3000",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "npx prettier --write \"**/*.{js,jsx,json,md}\""
+    "format": "npx prettier --write \"**/*.{js,jsx,json,md}\"",
+    "pack": "npx electron-builder --dir",
+    "dist": "npx electron-builder --macos --linux --windows"
   },
   "dependencies": {
     "classnames": "^2.2.6",
-    "electron": "^7.0.0",
     "foreman": "^3.0.1",
     "formik": "^2.0.1",
     "lodash": "^4.17.15",
@@ -25,6 +27,42 @@
     "react-scripts": "3.2.0",
     "store": "^2.0.12",
     "xlsx": "^0.15.1"
+  },
+  "build": {
+    "productName": "Chkin",
+    "files": [
+      "build/**/*",
+      "electron-starter.js",
+      "package.json"
+    ],
+    "extends": null,
+    "appId": "com.company.AppName",
+    "mac": {
+      "category": "public.app-category.social-networking",
+      "darkModeSupport": true
+    },
+    "dmg": {
+      "iconSize": 100,
+      "contents": [
+        {
+          "x": 180,
+          "y": 170
+        },
+        {
+          "x": 480,
+          "y": 170,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Network;Chat"
+    }
   },
   "prettier": {
     "endOfLine": "lf",
@@ -49,6 +87,8 @@
     ]
   },
   "devDependencies": {
+    "electron": "^7.0.0",
+    "electron-builder": "^21.2.0",
     "prettier": "^1.18.2"
   }
 }
