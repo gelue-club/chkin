@@ -7,6 +7,8 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 
+const isEmpty = require('lodash/isEmpty');
+
 app.disableHardwareAcceleration();
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -29,9 +31,11 @@ function createWindow() {
       protocol: 'file:',
       slashes: true,
     });
+
   mainWindow.loadURL(startUrl);
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+
+  !isEmpty(process.env.ELECTRON_START_URL) &&
+    mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
