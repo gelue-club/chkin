@@ -1,3 +1,3 @@
-import ClearfixDiv from './ClearfixDiv';
+const ClearfixDiv = require('./ClearfixDiv');
 
-export default ClearfixDiv;
+module.exports = ClearfixDiv;

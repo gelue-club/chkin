@@ -1,0 +1,11 @@
+.devide {
+  display: block;
+}
+
+.devide.solid {
+  border: 0.5px solid #6881DD;
+}
+
+.devide.dot {
+  border: 0.5px dashed #6881DD;
+}

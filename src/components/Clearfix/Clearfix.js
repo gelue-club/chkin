@@ -2,4 +2,4 @@ function Clearfix({ children }) {
   return children('clearfix');
 }
 
-export default Clearfix;
+module.exports = Clearfix;

@@ -1,3 +1,3 @@
-import Clearfix from './Clearfix';
+const Clearfix = require('./Clearfix');
 
-export default Clearfix;
+module.exports = Clearfix;

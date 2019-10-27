@@ -1,3 +1,3 @@
-import LeftFloatDiv from './LeftFloatDiv';
+const LeftFloatDiv = require('./LeftFloatDiv');
 
-export default LeftFloatDiv;
+module.exports = LeftFloatDiv;

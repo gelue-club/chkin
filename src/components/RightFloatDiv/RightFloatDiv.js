@@ -1,10 +1,12 @@
-import React from 'react';
-import cn from 'classnames';
+require('./RightFloatDiv.css');
 
-export default function RightFloatDiv({ className, children, width }) {
+const React = require('react');
+const cn = require('classnames');
+
+module.exports = function RightFloatDiv({ className, children, w }) {
   return (
-    <div className={cn('right', className)} style={{ width }}>
+    <div className={cn('right', className)} style={{ width: w }}>
       {children}
     </div>
   );
-}
+};

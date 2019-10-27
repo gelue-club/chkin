@@ -1,3 +1,3 @@
-import RightFloatDiv from './RightFloatDiv';
+const RightFloatDiv = require('./RightFloatDiv');
 
-export default RightFloatDiv;
+module.exports = RightFloatDiv;

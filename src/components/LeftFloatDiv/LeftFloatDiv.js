@@ -1,10 +1,12 @@
-import React from 'react';
-import cn from 'classnames';
+require('./LeftFloatDiv.css');
 
-export default function LeftFloatDiv({ className, children, width }) {
+const React = require('react');
+const cn = require('classnames');
+
+module.exports = function LeftFloatDiv({ className, children, w }) {
   return (
-    <div className={cn('left', className)} style={{ width }}>
+    <div className={cn('left', className)} style={{ width: w }}>
       {children}
     </div>
   );
-}
+};

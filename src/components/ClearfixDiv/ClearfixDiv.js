@@ -1,6 +1,7 @@
-import React from 'react';
-import cn from 'classnames';
-import Clearfix from 'layouts/Clearfix';
+const React = require('react');
+const cn = require('classnames');
+
+const Clearfix = require('../Clearfix');
 
 function ClearfixDiv({ className, children }) {
   return (
@@ -10,4 +11,4 @@ function ClearfixDiv({ className, children }) {
   );
 }
 
-export default ClearfixDiv;
+module.exports = ClearfixDiv;

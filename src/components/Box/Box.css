@@ -1,0 +1,22 @@
+.row {
+  width: 100%;
+}
+
+.row:before,
+.row:after {
+  content: '';
+  display: table;
+}
+
+.row:after {
+  clear: both;
+}
+
+.column,
+.columns {
+  width: 100%;
+  padding-left: 18px;
+  padding-right: 18px;
+  float: left;
+  box-sizing: border-box;
+}

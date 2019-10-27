@@ -1,12 +1,6 @@
-.App {
-  text-align: center;
-}
-
-.xy-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.hide {
+  visibility: none !important;
+  display: none !important;
 }
 
 .welcome-image {
@@ -46,4 +40,30 @@
   color: white;
   text-align: center;
   font-size: 18px;
+}
+
+
+
+
+
+
+
+.input-skin {
+  padding: 10px 0;
+  border-radius: 10px;
+  background: linear-gradient(to right, rgba(130,80,225,1) 0%, rgba(88,149,219,1) 100%);
+}
+
+.input-skin input {
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;
+  width: 100%;
+  border: 0;
+  outline: none;
+  background: none;
+}
+
+.input-skin input::placeholder {
+  color: rgb(174, 131, 255);
 }

@@ -1,3 +1,5 @@
+require('./XyCenterTranslate.css');
+
 const React = require('react');
 const cn = require('classnames');
 
