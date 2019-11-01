@@ -11,7 +11,8 @@
     "eject": "react-scripts eject",
     "format": "npx prettier --write \"**/*.{js,jsx,json,md}\"",
     "pack": "npx electron-builder --dir",
-    "dist": "npx electron-builder --macos --linux --windows"
+    "dist": "npx electron-builder --macos --linux --windows",
+    "reset": "node ./scripts/reset"
   },
   "build": {
     "productName": "Chkin",
@@ -119,8 +120,15 @@
     "xlsx": "^0.15.1"
   },
   "devDependencies": {
+    "chalk": "^2.4.2",
     "electron": "^7.0.0",
     "electron-builder": "^21.2.0",
-    "prettier": "^1.18.2"
+    "execa": "^3.2.0",
+    "license-checker": "^25.0.1",
+    "listr": "^0.14.3",
+    "make-dir": "^3.0.0",
+    "prettier": "^1.18.2",
+    "trash": "^6.0.0",
+    "write-file-atomic": "^3.0.1"
   }
 }
