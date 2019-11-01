@@ -1,7 +1,5 @@
 {
   "name": "chkin",
-  "version": "0.1.0",
-  "homepage": "./",
   "main": "./electron-starter.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
@@ -14,19 +12,6 @@
     "format": "npx prettier --write \"**/*.{js,jsx,json,md}\"",
     "pack": "npx electron-builder --dir",
     "dist": "npx electron-builder --macos --linux --windows"
-  },
-  "dependencies": {
-    "classnames": "^2.2.6",
-    "foreman": "^3.0.1",
-    "formik": "^2.0.1",
-    "lodash": "^4.17.15",
-    "prop-types": "^15.7.2",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "react-helmet": "^5.2.1",
-    "react-scripts": "3.2.0",
-    "store": "^2.0.12",
-    "xlsx": "^0.15.1"
   },
   "build": {
     "productName": "Chkin",
@@ -64,6 +49,26 @@
       "category": "Network;Chat"
     }
   },
+  "engines": {
+    "node": ">=10.16.3"
+  },
+  "git": {
+    "core.editor": "code"
+  },
+  "gitignore": [
+    "macOS",
+    "Windows",
+    "Linux",
+    "Node",
+    "VisualStudioCode",
+    "SublimeText",
+    "CVS",
+    "Diff",
+    "Vim",
+    "TortoiseGit",
+    "Diff",
+    "Patch"
+  ],
   "prettier": {
     "endOfLine": "lf",
     "semi": true,
@@ -85,6 +90,33 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "version": "0.1.0",
+  "description": "扫码签到客户端。",
+  "keywords": [],
+  "author": {
+    "name": "iyowei",
+    "email": "swzyocowboy@icloud.com",
+    "url": "https://github.com/iTonyYo"
+  },
+  "repository": {
+    "url": "git@github.com:gelue-club/chkin.git",
+    "type": "git"
+  },
+  "homepage": "./",
+  "bugs": "https://github.com/gelue-club/chkin/issues",
+  "dependencies": {
+    "classnames": "^2.2.6",
+    "foreman": "^3.0.1",
+    "formik": "^2.0.1",
+    "lodash": "^4.17.15",
+    "prop-types": "^15.7.2",
+    "react": "^16.11.0",
+    "react-dom": "^16.11.0",
+    "react-helmet": "^5.2.1",
+    "react-scripts": "3.2.0",
+    "store": "^2.0.12",
+    "xlsx": "^0.15.1"
   },
   "devDependencies": {
     "electron": "^7.0.0",
