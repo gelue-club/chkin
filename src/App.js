@@ -1,24 +1,23 @@
 require('./App.css');
-
-const React = require('react');
+const imgWelcome = require('./welcome.jpg');
 
 const electron = window.require('electron');
-const dialog = electron.remote.dialog;
-
 const XLXS = window.require('xlsx');
+
+const React = require('react');
 const { Helmet } = require('react-helmet');
 const { Formik, Form, Field } = require('formik');
 const store = require('store');
-const storeUpdate = require('store/plugins/update.js');
 const isEqual = require('lodash/isEqual');
 const isEmpty = require('lodash/isEmpty');
+const isNumber = require('lodash/isNumber');
 const filter = require('lodash/filter');
+const remove = require('lodash/remove');
 const merge = require('lodash/merge');
 const trim = require('lodash/trim');
 const toString = require('lodash/toString');
 const size = require('lodash/size');
 const times = require('lodash/times');
-const remove = require('lodash/remove');
 
 const XyCenterTranslate = require('./components/XyCenterTranslate');
 const Gutter = require('./components/Gutter');
@@ -30,14 +29,14 @@ const LeftFloatDiv = require('./components/LeftFloatDiv');
 const RightFloatDiv = require('./components/RightFloatDiv');
 const LineSplitedGutter = require('./components/LineSplitedGutter');
 
-const imgWelcome = require('./welcome.jpg');
-
+const dialog = electron.remote.dialog;
 const ipt = React.createRef();
 
+const storeUpdate = require('store/plugins/update.js');
 store.addPlugin(storeUpdate);
 
 function App() {
-  const [loaded, loadIt] = React.useState(
+  const [loadStatus, loaded] = React.useState(
     isEmpty(store.get('db')) ? false : true,
   );
 
@@ -49,10 +48,10 @@ function App() {
   });
 
   React.useEffect(() => {
-    if (!isEqual(loaded, false)) {
+    if (!isEqual(loadStatus, false)) {
       ipt.current.focus();
     }
-  }, [loaded]);
+  }, [loadStatus]);
 
   return (
     <>
@@ -60,20 +59,21 @@ function App() {
         <title>签到</title>
       </Helmet>
 
-      {isEqual(loaded, true) && (
+      {isEqual(loadStatus, true) && (
         <View className="view-checking">
           <Gutter h="32px" />
           <Formik
             initialValues={{ guest: '' }}
             onSubmit={({ guest }, actions) => {
               const foundGuest = findOneGuestByPhone({ phone: guest });
+              actions.resetForm();
 
               if (isEmpty(foundGuest)) {
-                actions.resetForm();
-
                 updateGuestInfo({
                   userName: null,
                   userPhone: null,
+                  userSeat: null,
+                  userTable: null,
                 });
 
                 return;
@@ -81,12 +81,12 @@ function App() {
 
               store.update('db', targetDB => {
                 remove(targetDB, val =>
-                  isEqual(val.userPhone, findOneGuestByPhone({ phone: guest })),
+                  isEqual(val.userPhone, formatPhoneNumber({ phone: guest })),
                 );
 
                 targetDB.unshift(
                   merge(foundGuest[0], {
-                    checked: foundGuest[0].checked + 1,
+                    userChecked: foundGuest[0].userChecked + 1,
                   }),
                 );
 
@@ -96,9 +96,9 @@ function App() {
               updateGuestInfo({
                 userName: foundGuest[0].userName,
                 userPhone: foundGuest[0].userPhone,
+                userSeat: foundGuest[0].userSeat,
+                userTable: foundGuest[0].userTable,
               });
-
-              actions.resetForm();
             }}
           >
             {props => (
@@ -134,12 +134,12 @@ function App() {
             <div>
               <Text
                 b="bold"
-                size="18px"
+                size="30px"
                 align="center"
                 color={(() =>
                   isEmpty(guestInfo.userSeat) ? '#dfe6e9' : '#000')()}
               >
-                {isEmpty(guestInfo.userSeat) ? '000' : guestInfo.userSeat}
+                {isEmpty(guestInfo.userSeat) ? '***' : guestInfo.userSeat}
               </Text>
             </div>
           </Box>
@@ -162,8 +162,13 @@ function App() {
                 </Text>
               </LeftFloatDiv>
               <RightFloatDiv w="70%">
-                <Text b="bold" size="18px" align="right">
-                  {guestInfo.userTable}
+                <Text
+                  b="bold"
+                  align="right"
+                  color={(() =>
+                    isEmpty(guestInfo.userSeat) ? '#dfe6e9' : '#000')()}
+                >
+                  {isEmpty(guestInfo.userTable) ? '***' : guestInfo.userTable}
                 </Text>
               </RightFloatDiv>
             </ClearfixDiv>
@@ -179,8 +184,14 @@ function App() {
                 </Text>
               </LeftFloatDiv>
               <RightFloatDiv w="70%">
-                <Text b="bold" size="18px" align="right">
-                  {guestInfo.userName}
+                <Text
+                  b="bold"
+                  size="18px"
+                  align="right"
+                  color={(() =>
+                    isEmpty(guestInfo.userName) ? '#dfe6e9' : '#000')()}
+                >
+                  {isEmpty(guestInfo.userName) ? '***' : guestInfo.userName}
                 </Text>
               </RightFloatDiv>
             </ClearfixDiv>
@@ -196,8 +207,14 @@ function App() {
                 </Text>
               </LeftFloatDiv>
               <RightFloatDiv w="70%">
-                <Text b="bold" size="18px" align="right">
-                  {guestInfo.userPhone}
+                <Text
+                  b="bold"
+                  size="18px"
+                  align="right"
+                  color={(() =>
+                    isNumber(guestInfo.userPhone) ? '#000' : '#dfe6e9')()}
+                >
+                  {isNumber(guestInfo.userPhone) ? guestInfo.userPhone : '***'}
                 </Text>
               </RightFloatDiv>
             </ClearfixDiv>
@@ -205,7 +222,7 @@ function App() {
         </View>
       )}
 
-      {!isEqual(loaded, true) && (
+      {!isEqual(loadStatus, true) && (
         <View className="view-import-xlsx">
           <WelcomeImage />
           <ImportTrigger
@@ -216,14 +233,17 @@ function App() {
               }
 
               const db = times(size(xlsx), idx => ({
-                userName: xlsx[idx]['姓名'],
-                userPhone: formatPhoneNumber({ phone: xlsx[idx]['手机号'] }),
-                checked: 0,
+                userName: xlsx[idx]['姓名'] || '',
+                userPhone:
+                  formatPhoneNumber({ phone: xlsx[idx]['电话'] }) || '',
+                userSeat: xlsx[idx]['座位号'] || '',
+                userTable: xlsx[idx]['餐桌号'] || '',
+                userChecked: xlsx[idx]['签到状态'] || 0,
               }));
 
               store.set('db', db);
 
-              loadIt(true);
+              loaded(true);
             }}
           />
         </View>
