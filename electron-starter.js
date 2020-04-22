@@ -1,11 +1,8 @@
 const path = require('path');
 const url = require('url');
 
-const electron = require('electron');
+const { app, BrowserWindow, Menu } = require('electron');
 const isEmpty = require('lodash/isEmpty');
-
-const app = electron.app;
-const BrowserWindow = electron.BrowserWindow;
 
 app.disableHardwareAcceleration();
 
@@ -38,8 +35,6 @@ function createWindow() {
   });
 }
 
-app.on('ready', createWindow);
-
 app.on('window-all-closed', function() {
   if (process.platform !== 'darwin') {
     app.quit();
@@ -51,3 +46,11 @@ app.on('activate', function() {
     createWindow();
   }
 });
+
+(async () => {
+  await app.whenReady();
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate([]));
+
+  createWindow();
+})();

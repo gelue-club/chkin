@@ -29,7 +29,7 @@ const LeftFloatDiv = require('./components/LeftFloatDiv');
 const RightFloatDiv = require('./components/RightFloatDiv');
 const LineSplitedGutter = require('./components/LineSplitedGutter');
 
-const dialog = electron.remote.dialog;
+const { Menu, MenuItem, dialog, getCurrentWindow, app } = electron.remote;
 const ipt = React.createRef();
 
 const storeUpdate = require('store/plugins/update.js');
@@ -52,6 +52,44 @@ function App() {
       ipt.current.focus();
     }
   }, [loadStatus]);
+
+  const menu = new Menu();
+
+  menu.append(
+    new MenuItem({
+      label: '导出数据',
+      click() {
+        console.log('点击了 "导出数据"');
+      },
+    }),
+  );
+
+  menu.append(
+    new MenuItem({
+      label: '重新导入数据',
+      click() {
+        console.log('点击了 "重新导入数据"');
+      },
+    }),
+  );
+
+  menu.append(
+    new MenuItem({
+      label: '退出',
+      click() {
+        app.quit();
+      },
+    }),
+  );
+
+  window.addEventListener(
+    'contextmenu',
+    e => {
+      e.preventDefault();
+      menu.popup({ window: getCurrentWindow() });
+    },
+    false,
+  );
 
   return (
     <>
